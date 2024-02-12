@@ -22,3 +22,17 @@ conda create -f brainiak_env.yml
 ```bash
 $ conda install -n brainiak_env ipykernel --update-deps --force-reinstall
 ```
+
+# The submodule, `hmm-fmri`
+
+#### I have written code in an earlier repo which generates simple, two-deminsional data for testing the fitting procedure of the HMM used in Brainiak. You must install/import it.
+
+Bring to current path
+```bash
+cp ./hmm-fmri/hmm_fmri.py .
+```
+
+Import
+```python
+from hmm_fmri import SimSimpData, Dataset
+```
