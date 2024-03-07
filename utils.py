@@ -1,46 +1,29 @@
 #!/usr/bin/env brainiak_env
 
-# imports
-from brainiak.eventseg.event import EventSegment
-
-import scipy.io
-from scipy import stats
-from scipy.stats import norm, zscore, pearsonr
-from scipy.signal import gaussian, convolve
-
-from sklearn import decomposition
-from sklearn.model_selection import LeaveOneOut, KFold
-
-import nibabel as nib
-from nilearn.input_data import NiftiMasker
-
+import urllib.request
+import shutil
 import numpy as np
 import deepdish as dd
+from pathlib import Path
 
-import wget
-import os
-
-def download_data(output: str):
+def download_data(out_dir: Path):
     """Download sherlock dataset"""
+    out_dir.mkdir(exist_ok=True)
 
     # sherlock data URLs
     url_sherlock = 'https://ndownloader.figshare.com/files/9017983'
     url_AG_movie = 'https://ndownloader.figshare.com/files/9055612'
 
     # download data
-    wget.download(url_sherlock, out=os.path.join(output, 'sherlock.h5'))
-    wget.download(url_AG_movie, out=os.path.join(output, 'AG_movie_1recall.h5'))  
+    with urllib.request.urlopen(url_sherlock) as response, open(out_dir / 'sherlock.h5', 'wb') as out_file:
+        shutil.copyfileobj(response, out_file)
 
-    # check
-    if os.path.exists(os.path.join(output, 'sherlock.h5')) and \
-    os.path.exists(os.path.join(output, 'AG_movie_1recall.h5')):
-        print(f'Successful download in \t {output}')
-
-    else:
-        print(f'Failed to download in \t {output}')
+    with urllib.request.urlopen(url_AG_movie) as response, open(out_dir / 'AG_movie_1recall.h5', 'wb') as out_file:
+        shutil.copyfileobj(response, out_file)
 
 
-def load_data(path, dataset) -> np.ndarray:
+
+def load_data(path: Path, dataset: str) -> np.ndarray:
     """Load sherlock data
     
     Parameters
@@ -56,9 +39,8 @@ def load_data(path, dataset) -> np.ndarray:
     D: numpy.ndarray
     """
 
-    D = dd.io.load(os.path.join(path, f'{dataset}.h5'))
+    D = dd.io.load(path / f"{dataset}.h5")
 
     print(f'Access variables like \n D["BOLD"] \n D["coords"] \n D["human_bounds"]')
 
     return D
-

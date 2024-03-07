@@ -12,27 +12,17 @@ git clone https://github.com/w-decker/EventSeg-demo.git
 ```
 
 #### Next activate the brainiak environment (brainiak_env).
+If you are working on relearn0.lsu.edu, you should be able to use the shared `brainiack_env` at `/data/.conda/envs/brainiak_env`. In VSCode, `ctrl+shift+p` to get the command prompt, then "Select Python Interpretter", and choose this environment from the list.
+
+If you need to install a non-shared version, you could do:
 
 ```bash
-conda create -f brainiak_env.yml
+conda create --name brainiak_env
+conda install --name brainiak_env -c brainiak -c defaults -c conda-forge brainiak scikit-learn-intelex ipykernel nilearn deepdish
 ```
 
 #### If you receive errors regarding ipykernel (hopefully you will not), try the following in the terminal.
 
 ```bash
 $ conda install -n brainiak_env ipykernel --update-deps --force-reinstall
-```
-
-# The submodule, `hmm-fmri`
-
-#### I have written code in an earlier repo which generates simple, two-deminsional data for testing the fitting procedure of the HMM used in Brainiak. You must install/import it.
-
-Bring to current path
-```bash
-cp ./hmm-fmri/hmm_fmri.py .
-```
-
-Import
-```python
-from hmm_fmri import SimSimpData, Dataset
 ```
